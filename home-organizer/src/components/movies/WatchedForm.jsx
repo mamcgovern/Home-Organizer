@@ -6,12 +6,15 @@ function getToday() {
 }
 
 function WatchedForm({ movie, onSubmit, onClose, isSaving }) {
+    const isEditingWatchedDetails =
+        movie.status === "watched" && Boolean(movie.watchedDate);
+
     const [formData, setFormData] = useState({
-        watchedDate: getToday(),
-        maddieRating: "",
-        nickRating: "",
+        watchedDate: movie.watchedDate || getToday(),
+        maddieRating: movie.maddieRating ?? "",
+        nickRating: movie.nickRating ?? "",
         notes: movie.notes || "",
-        isRewatch: false,
+        isRewatch: Boolean(movie.isRewatch),
     });
 
     function handleChange(event) {
@@ -23,9 +26,9 @@ function WatchedForm({ movie, onSubmit, onClose, isSaving }) {
         }));
     }
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
-        onSubmit(movie.id, formData);
+        await onSubmit(movie.id, formData);
     }
 
     return (
@@ -38,8 +41,15 @@ function WatchedForm({ movie, onSubmit, onClose, isSaving }) {
             >
                 <header className="modal-header">
                     <div>
-                        <p className="card-eyebrow">Mark as watched</p>
-                        <h2 id="watched-form-title">{movie.title}</h2>
+                        <p className="card-eyebrow">
+                            {isEditingWatchedDetails
+                                ? "Edit watched details"
+                                : "Mark as watched"}
+                        </p>
+
+                        <h2 id="watched-form-title">
+                            {movie.title}
+                        </h2>
                     </div>
 
                     <button
@@ -138,7 +148,11 @@ function WatchedForm({ movie, onSubmit, onClose, isSaving }) {
                             type="submit"
                             disabled={isSaving}
                         >
-                            {isSaving ? "Saving..." : "Mark watched"}
+                            {isSaving
+                                ? "Saving..."
+                                : isEditingWatchedDetails
+                                  ? "Save watched details"
+                                  : "Mark watched"}
                         </button>
                     </footer>
                 </form>

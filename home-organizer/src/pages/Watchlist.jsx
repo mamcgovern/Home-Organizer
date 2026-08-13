@@ -9,12 +9,14 @@ import {
     Plus,
     RotateCcw,
     Search,
-    Shuffle,
+    Star,
     Trash2,
 } from "lucide-react";
 
 import MovieForm from "../components/movies/MovieForm";
 import WatchedForm from "../components/movies/WatchedForm";
+import MovieRandomizer from "../components/movies/MovieRandomizer";
+import MovieStats from "../components/movies/MovieStats";
 
 import {
     addMovie,
@@ -299,6 +301,16 @@ function Watchlist() {
                     </button>
 
                     <button
+    className="movie-icon-action movie-icon-action--rating"
+    type="button"
+    title="Edit watched date and ratings"
+    aria-label={`Edit ratings for ${movie.title}`}
+    onClick={() => setSelectedMovie(movie)}
+>
+    <Star size={17} />
+</button>
+
+                    <button
                         className="movie-icon-action"
                         type="button"
                         title="Return to watchlist"
@@ -567,28 +579,17 @@ function Watchlist() {
     }
 
     function renderComingSoon() {
-        const isRandomizer = activeSection === "randomizer";
-
         return (
             <div className="movie-state">
                 <div className="movie-state-icon">
-                    {isRandomizer ? (
-                        <Shuffle size={34} />
-                    ) : (
-                        <Film size={34} />
-                    )}
+                    <Film size={34} />
                 </div>
 
-                <h3>
-                    {isRandomizer
-                        ? "Random movie selector"
-                        : "Movie statistics"}
-                </h3>
+                <h3>Movie statistics</h3>
 
                 <p>
-                    {isRandomizer
-                        ? "We’ll build the filtered movie randomizer next."
-                        : "Your viewing totals, genres, ratings, and movie ages will appear here."}
+                    Your viewing totals, genres, ratings, and movie ages
+                    will appear here.
                 </p>
             </div>
         );
@@ -703,9 +704,18 @@ function Watchlist() {
 
             {error && <p className="error-message">{error}</p>}
 
-            {showCollection
-                ? renderMovieCollection()
-                : renderComingSoon()}
+            {showCollection && renderMovieCollection()}
+
+            {activeSection === "randomizer" && (
+                <MovieRandomizer
+                    movies={watchlistMovies}
+                    onMarkWatched={setSelectedMovie}
+                />
+            )}
+
+            {activeSection === "stats" && (
+                <MovieStats movies={watchedMovies} />
+            )}
 
             {showMovieForm && (
                 <MovieForm
