@@ -50,6 +50,10 @@ export async function addMovie(movie) {
             ? Number(movie.nickRating)
             : null,
         notes: movie.notes?.trim() || "",
+        overview: movie.overview?.trim() || "",
+        posterUrl: movie.posterUrl || "",
+        imdbId: movie.imdbId || "",
+        tmdbId: movie.tmdbId ? Number(movie.tmdbId) : null,
         isRewatch: Boolean(movie.isRewatch),
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
@@ -66,10 +70,28 @@ export async function addMovie(movie) {
 export async function updateMovie(movieId, updates) {
     const movieReference = doc(db, "movies", movieId);
 
-    await updateDoc(movieReference, {
-        ...updates,
+    const movieData = {
+        title: updates.title.trim(),
+        releaseYear: updates.releaseYear
+            ? Number(updates.releaseYear)
+            : null,
+        genres: updates.genres ?? [],
+        runtimeMinutes: updates.runtimeMinutes
+            ? Number(updates.runtimeMinutes)
+            : null,
+        streamingServices: updates.streamingServices ?? [],
+        suggestedBy: updates.suggestedBy || "",
+        priority: updates.priority || "medium",
+        notes: updates.notes?.trim() || "",
+        overview: updates.overview?.trim() || "",
+        posterUrl: updates.posterUrl || "",
+        imdbId: updates.imdbId || "",
+        tmdbId: updates.tmdbId ? Number(updates.tmdbId) : null,
+        status: updates.status || "watchlist",
         updatedAt: serverTimestamp(),
-    });
+    };
+
+    await updateDoc(movieReference, movieData);
 }
 
 export async function markMovieWatched(movieId, watchedDetails) {
