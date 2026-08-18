@@ -8,6 +8,8 @@ import {
     Utensils,
 } from "lucide-react";
 
+import CalendarWidget from "../components/dashboard/CalendarWidget";
+
 import "../styles/dashboard.css";
 
 const upcomingTasks = [
@@ -144,24 +146,7 @@ function Home() {
                     </div>
                 </article>
 
-                <article className="dashboard-card">
-                    <div className="card-heading">
-                        <div>
-                            <p className="card-eyebrow">This week</p>
-                            <h3>Calendar</h3>
-                        </div>
-
-                        <CalendarDays size={24} />
-                    </div>
-
-                    <div className="empty-widget">
-                        <CalendarDays size={34} strokeWidth={1.5} />
-                        <p>No events connected yet.</p>
-                        <span>
-                            Google Calendar integration will appear here.
-                        </span>
-                    </div>
-                </article>
+                <CalendarWidget />
 
                 <article className="dashboard-card">
                     <div className="card-heading">

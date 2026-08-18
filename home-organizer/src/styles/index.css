@@ -2,6 +2,7 @@
 @import "./layout.css";
 @import "./dashboard.css";
 @import "./movies.css";
+@import "./calendar.css";
 
 :root {
     font-family: "DM Sans", sans-serif;
